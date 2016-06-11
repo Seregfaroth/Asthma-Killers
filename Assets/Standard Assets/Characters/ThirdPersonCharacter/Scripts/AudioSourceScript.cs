@@ -17,7 +17,7 @@ public class AudioSourceScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         t = go.GetComponent<UnityStandardAssets.Characters.ThirdPerson.ThirdPersonUserControl>();
-        s.clip = soundHealth100;
+        s.clip = soundHealth20;
         s.Play();
         s.loop = true;       
 	}

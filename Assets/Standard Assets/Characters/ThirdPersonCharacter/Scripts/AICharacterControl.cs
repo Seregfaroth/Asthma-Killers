@@ -7,6 +7,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class AICharacterControl : MonoBehaviour
     {
+        
         public float patrolSpeed = 2f;
         private float patrolTimer;                  // A timer for the patrolWaitTime.
         public NavMeshAgent agent;                  // the navmesh agent required for the path finding
@@ -17,7 +18,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private int wayPointIndex;                  // A counter for the way point array.
         public GUIText distanceText;
         private GameObject player;                  // Reference to the player.
+        private ThirdPersonUserControl playerController; //
         private float distance;
+
 
         private void Start()
         {
@@ -30,18 +33,25 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             distance = 1.0f;
             agent = GetComponent<NavMeshAgent>();
             player = GameObject.FindGameObjectWithTag("Player");
-
+            playerController = player.GetComponent<ThirdPersonUserControl>();
         }
 
 
         private void Update()
         {
             distance = CalculatePathLength(player.transform.position);
-            distanceText.text = "Distance: " + distance;
-            if (distance < 20)
+            distanceText.text = "Distance: " + distance + "  PHealth: " + playerController.health;
+            if( distance < 20 )
+            {
+                //GetComponent<AudioSource>().clip = 
+                //GetComponent<AudioSource>().Play();
+            }
+            
+            if (distance < 120-playerController.health)
             { 
                 target = player.transform;
                 Chasing();
+                distanceText.text += "  Chasing";
             }
             else
             {

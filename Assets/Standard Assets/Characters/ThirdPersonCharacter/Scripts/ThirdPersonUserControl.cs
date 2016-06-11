@@ -8,7 +8,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
-        public int health = 100;
+        public double health = 100;
         public Text healthText;
         private bool healthChange;
         private AudioSource go;
@@ -45,7 +45,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
-
+            decreaseHealth(Time.deltaTime);
+            
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -57,6 +58,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void FixedUpdate()
         {
             // read inputs
+            //setHealthText();
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
@@ -83,33 +85,22 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             m_Jump = false;
         }
 
-        public void setHealth(int newHealth)
+        public void setHealth(double newHealth)
         {
             health = newHealth;
             setHealthText();
         }
 
-        public void increaseHealth( int inc)
+        public void increaseHealth( double inc)
         {
             health = health + inc;
             setHealthText();
         }
 
-        public void decreaseHealth( int dec )
+        public void decreaseHealth( double dec )
         {
             health = health - dec;
-            setHealthText();
-            if (health < 60)
-            {
-                //go.clip = h60;
-                //go.Play();
-            }
-            if (health <= 100 && health >= 60)
-            {
-                
-                //go.clip = h100;
-                //go.Play();
-            }
+            setHealthText();           
         }
 
         public void setHealthText()
