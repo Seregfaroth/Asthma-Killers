@@ -1,12 +1,19 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        public int health = 100;
+        public Text healthText;
+        private bool healthChange;
+        private AudioSource go;
+        public AudioClip h60;
+        public AudioClip h100; 
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         private Vector3 m_CamForward;             // The current forward direction of the camera
@@ -16,6 +23,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         
         private void Start()
         {
+            //go = GetComponent<AudioSource>();
+            setHealthText();
+
             // get the transform of the main camera
             if (Camera.main != null)
             {
@@ -35,6 +45,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -70,6 +81,40 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             // pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump);
             m_Jump = false;
+        }
+
+        public void setHealth(int newHealth)
+        {
+            health = newHealth;
+            setHealthText();
+        }
+
+        public void increaseHealth( int inc)
+        {
+            health = health + inc;
+            setHealthText();
+        }
+
+        public void decreaseHealth( int dec )
+        {
+            health = health - dec;
+            setHealthText();
+            if (health < 60)
+            {
+                //go.clip = h60;
+                //go.Play();
+            }
+            if (health <= 100 && health >= 60)
+            {
+                
+                //go.clip = h100;
+                //go.Play();
+            }
+        }
+
+        public void setHealthText()
+        {
+            healthText.text = "Health: " + health.ToString();
         }
     }
 }
