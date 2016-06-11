@@ -40,14 +40,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Update()
         {
             distance = CalculatePathLength(player.transform.position);
-            distanceText.text = "Distance: " + distance + "  PHealth: " + playerController.health;
+            distanceText.text = "Distance: " + (int)Math.Ceiling(distance) + "  PHealth: " + (int)Math.Ceiling(playerController.health);
             if( distance < 20 )
             {
                 //GetComponent<AudioSource>().clip = 
                 //GetComponent<AudioSource>().Play();
             }
             
-            if (distance < 120-playerController.health)
+            if (distance < 30-(playerController.health/5))
             { 
                 target = player.transform;
                 Chasing();
