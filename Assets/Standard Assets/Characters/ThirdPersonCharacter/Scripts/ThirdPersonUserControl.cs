@@ -45,7 +45,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
-            decreaseHealth(Time.deltaTime);
+            //decreaseHealth(Time.deltaTime);
             
             if (!m_Jump)
             {
