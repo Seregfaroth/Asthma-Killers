@@ -8,7 +8,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
-        public double health = 100;
+        public double health = 50;
+        private double maxHealth = 100;
+        private double minHealth = 0;
         public Text healthText;
         private bool healthChange;
         private AudioSource go;
@@ -45,7 +47,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
-            decreaseHealth(Time.deltaTime);
+            //decreaseHealth(Time.deltaTime);
             
             if (!m_Jump)
             {
@@ -94,12 +96,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public void increaseHealth( double inc)
         {
             health = health + inc;
+            if (health > maxHealth)
+                health = maxHealth;
             setHealthText();
         }
 
         public void decreaseHealth( double dec )
         {
             health = health - dec;
+            if (health < minHealth)
+                health = minHealth;
             setHealthText();           
         }
 

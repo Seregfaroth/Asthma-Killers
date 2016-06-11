@@ -221,5 +221,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				m_Animator.applyRootMotion = false;
 			}
 		}
-	}
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Inhaler"))
+            {
+                other.gameObject.SetActive(false);
+                GetComponent<ThirdPersonUserControl>().increaseHealth(10);
+            }
+        }
+    }
 }
