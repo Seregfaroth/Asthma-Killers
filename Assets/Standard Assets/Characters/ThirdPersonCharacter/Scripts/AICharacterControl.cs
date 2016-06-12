@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -20,10 +22,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private GameObject player;                  // Reference to the player.
         private ThirdPersonUserControl playerController; //
         private float distance;
-
+        public Text deathText;
+        private bool deathWait;
+        private double deathWaitSec;
+        public AudioClip monsterCatch;
 
         private void Start()
         {
+            deathWait = false;
+            deathText.enabled = false;
+            deathWaitSec = 4;
             // get the components on the object we need ( should not be null due to require component so no need to check )
             agent = GetComponentInChildren<NavMeshAgent>();
             character = GetComponent<ThirdPersonCharacter>();
@@ -39,15 +47,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+            if (deathWait)
+            {
+                if (deathWaitSec > 0)
+                {
+                    deathWaitSec -= Time.deltaTime;
+                }
+                if (deathWaitSec <= 0)
+                {
+                    SceneManager.LoadScene("RoomOlavur");
+                }
+            }
+        
             distance = CalculatePathLength(player.transform.position);
             distanceText.text = "Distance: " + (int)Math.Ceiling(distance) + "  PHealth: " + (int)Math.Ceiling(playerController.health);
             if( distance < 20 )
             {
-                //GetComponent<AudioSource>().clip = 
-                //GetComponent<AudioSource>().Play();
+                
             }
             
-            if (distance < 30-(playerController.health/5))
+            if (distance < 100-(playerController.health/5))
             { 
                 target = player.transform;
                 Chasing();
@@ -146,5 +165,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             return pathLength;
         }
-    }
+        void OnTriggerEnter(Collider other)
+        {
+            
+            
+        }
+
+        void OnCollisionEnter( Collision col1)
+        {
+            if (col1.gameObject.tag == "Player")
+            {
+                GetComponent<AudioSource>().clip = monsterCatch;
+                GetComponent<AudioSource>().Play();
+                deathText.enabled = true;
+                deathWait = true;
+                //Time.timeScale = 0.0001f;
+            }
+        }
+
+        }
 }
